@@ -26,7 +26,6 @@ You might need to follow the official instructions to install [Detectron2](https
 ### 3. Run the application
 ```
 wave run src.app
-
 ```
 ### 4. View the application
 Go to http://localhost:10101 from browser
