@@ -31,8 +31,9 @@ async def display_detections(q):
             title = "Object Detector",
             items = [
                 ui.text("No objects picked. Displaying all"),
-                ui.picker(name='object_picker', label='Pick objects to detect', width = '50%', trigger=True,
+                ui.picker(name='object_picker', label='Pick objects to detect', width = '50%',
                     choices=[ui.choice(thing, thing) for thing in q.app.object_detector.classes_names] , values=[]),
+                ui.button(name='pick_class', label='Pick', primary=True)
             ],
         )
 
@@ -50,9 +51,9 @@ async def display_detections(q):
                 box = ui.box('content'),
                 title = "Object Detector",
                 items = [
-                    ui.picker(name='object_picker', label='Pick objects to detect', width = '50%', trigger=True,
+                    ui.picker(name='object_picker', label='Pick objects to detect', width = '50%',
                         choices=[ui.choice(thing, thing) for thing in q.app.object_detector.classes_names] , values=[]),
-
+                    ui.button(name='pick_class', label='Pick', primary=True)
                 ],
             )
 

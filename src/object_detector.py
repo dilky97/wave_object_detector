@@ -32,10 +32,11 @@ class ObjectDetector:
         self.predictor = DefaultPredictor(self.cfg)
 
     def __visualize_output(self, img, outputs):
-        # We can use `Visualizer` to draw the predictions on the image.
+        # Use `Visualizer` to draw the predictions on the image.
         v = Visualizer(img[:, :, ::-1], MetadataCatalog.get(self.cfg.DATASETS.TRAIN[0]), scale=1.2)
         out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
 
+        # Get base64 encoded image
         pil_img = Image.fromarray(out.get_image()[:, :, ::-1])
         buff = BytesIO()
         pil_img.save(buff, format="PNG")
@@ -45,11 +46,19 @@ class ObjectDetector:
         return img_str
 
     def __pick_classes(self, outputs, picked_classes):
+        """
+        Filter the chosen classes from the predictions
+        :param outputs: predictions returned by the model inference
+        :param picked_classes: user picked values from the picker
+
+        :returns: filtered outputs
+        """
+
         pred_classes = np.array(outputs['instances'].pred_classes)
         mask = np.isin(pred_classes, picked_classes)
         idx = np.nonzero(mask)
         
-        # Get Instance values as a dict and leave only the desired ones
+        # Get the picked classes from predicted Instances
         out_fields = outputs['instances'].get_fields()
         for field in out_fields:
             out_fields[field] = out_fields[field][idx]
@@ -58,17 +67,22 @@ class ObjectDetector:
 
 
     def detect_objects(self, image_path, picked_classes):
+        """
+        Detect objects in a supplied image
+        :param image_path: Path to the image file
+        :param picked_classes: user picked values from the picker
+
+        :returns: Annotated image with bounding box detections
+        """
+
         img = Image.open(image_path).convert('RGB')
         img = np.array(img)
 
-        # self.cfg, predictor = load_predictor()
         outputs = self.predictor(img)
         if not picked_classes:
             result_img = self.__visualize_output(img, outputs)
         else:
-            # pred_classes = np.array(outputs['instances'].pred_classes)
             mask = np.isin(self.classes_names, picked_classes)
-            # mask = np.isin(pred_classes, picked_classes)
             class_idxs = np.nonzero(mask)
             picked_outputs = self.__pick_classes(outputs, class_idxs)
             result_img = self.__visualize_output(img, picked_outputs)
