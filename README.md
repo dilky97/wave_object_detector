@@ -3,7 +3,7 @@
 Object Detection app using Detectron2 and [H2O Wave](https://wave.h2o.ai)
 
 
-<img src="./static/demo.gif" width="80%" height="80%"/>
+<img src="./static/demo.gif" width="100%" height="100%"/>
 
 ## Running this App Locally
 
