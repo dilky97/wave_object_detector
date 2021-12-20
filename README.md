@@ -18,6 +18,7 @@ Follow the documentation to [download and run](https://wave.h2o.ai/docs/installa
 ### 2. Build the python environment
 Clone the repo and create python environment with the required dependencies.
 ```
+python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
